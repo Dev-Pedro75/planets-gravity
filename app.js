@@ -3,6 +3,7 @@ const gravidadeInput = document.querySelector("#gravidade-input");
 canvas.width = window.screen.width;
 canvas.height = (50 * window.screen.height) / 100;
 const ctx = canvas.getContext("2d");
+let isUpdate = false;
 let boxs = [];
 let balls = 20;
 const colors = [
@@ -25,7 +26,6 @@ const gravityOptions = {
   lua: 0.3652,
 };
 let confetti = new Confetti("update");
-
 confetti.setCount(40);
 confetti.setSize(1.5);
 confetti.setPower(75);
@@ -58,8 +58,10 @@ function getRandomInt(min, max) {
 
 amountBalls.addEventListener("input", () => {
   bt.classList.remove("yl");
+
   setTimeout(() => {
     bt.classList.add("yl");
+    bt.textContent = "Update Values";
   }, 50);
 });
 
@@ -98,18 +100,12 @@ class Box {
     this.drawBox(x, y, width, height, color, radius, stroke);
   }
   up() {
-    /* const t = getRandomInt(1000, 1200); */
     if (stopUp) {
       return;
     }
-
-    /* setTimeout(() => {
-      invert.textContent = "1s";
-    }, 1000); */
     setTimeout(() => {
       stopUp = true;
       setTimeout(() => {
-        invert.textContent = "Gravidade inversa";
         stopUp = false;
       }, 1 * 1000);
       this.text = true;
@@ -161,7 +157,7 @@ class Box {
 }
 
 function drawStage() {
-  draw(0, 0, canvas.width, canvas.height, "#485a63");
+  draw(0, 0, canvas.width, canvas.height, "#525c6b");
 }
 
 for (let i = 0; i < balls; i++) {
@@ -183,17 +179,11 @@ function main() {
       boxs[i].radius,
       boxs[i].stroke
     );
-    /* for (let i2 = 0; i2 < boxs.length; i2++) {
-      if (i2 == i) {
-        return;
-      }
-      boxs[i].colision(boxs[i2]);
-    } */
     if (boxs[i].text == true) {
       ctx.font = "2rem Comic Sans MS";
       ctx.fillStyle = "white";
       ctx.textAlign = "center";
-      ctx.fillText("Gravidade inversa!", canvas.width / 2, canvas.height / 2);
+      ctx.fillText("Reverse gravity!", canvas.width / 2, canvas.height / 2);
     }
   }
   window.requestAnimationFrame(main);
@@ -209,6 +199,7 @@ bt.addEventListener("click", () => {
     );
     return;
   }
+  bt.textContent = "Restart";
   bt.classList.remove("yl");
   pause = true;
   balls = amountBalls.value;
@@ -225,4 +216,5 @@ invert.addEventListener("click", () => {
     item.up();
   });
 });
+
 main();
