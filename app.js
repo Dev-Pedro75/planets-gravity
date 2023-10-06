@@ -103,7 +103,6 @@ class Box {
       return;
     }
 
-    invert.textContent = "1s";
     /* setTimeout(() => {
       invert.textContent = "1s";
     }, 1000); */
@@ -200,12 +199,6 @@ function main() {
   window.requestAnimationFrame(main);
 }
 
-/* setInterval(() => {
-  boxs.forEach((item) => {
-    item.up();
-  });
-}, 8100); */
-
 bt.addEventListener("click", () => {
   if (!amountBalls) {
     return;
@@ -233,5 +226,3 @@ invert.addEventListener("click", () => {
   });
 });
 main();
-
-// Edit given parameters
