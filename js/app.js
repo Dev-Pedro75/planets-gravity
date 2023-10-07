@@ -110,7 +110,7 @@ class Box {
       }, 1 * 1000);
       this.text = true;
       this.speed = 5;
-      this.gravity = -this.gravity * 0.5;
+      this.gravity = -this.gravity;
 
       setTimeout(() => {
         this.text = false;
