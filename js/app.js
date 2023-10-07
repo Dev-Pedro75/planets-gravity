@@ -26,9 +26,9 @@ const gravityOptions = {
   lua: 0.3652,
 };
 let confetti = new Confetti("update");
-confetti.setCount(40);
-confetti.setSize(1.5);
-confetti.setPower(75);
+confetti.setCount(20);
+confetti.setSize(1.2);
+confetti.setPower(20);
 confetti.setFade(true);
 confetti.destroyTarget(false);
 
@@ -134,25 +134,8 @@ class Box {
     ctx.strokeStyle = stroke;
 
     ctx.stroke();
-
+    this.stroke = "white";
     ctx.closePath();
-  }
-  colision() {
-    boxs.forEach((circle) => {
-      if (this.id == circle.id) {
-        return;
-      }
-      var dx = this.x - circle.x;
-      var dy = this.y - circle.y;
-      var distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance <= this.radius + circle.radius) {
-        this.stroke = "white";
-        circle.stroke = "white";
-      } else {
-        this.stroke = this.originalColor;
-      }
-    });
   }
 }
 
@@ -193,7 +176,7 @@ bt.addEventListener("click", () => {
   if (!amountBalls) {
     return;
   }
-  if (amountBalls.value > 5000) {
+  if (amountBalls.value > 6000) {
     alert(
       "Esse valor é muito alto e pode causar travamentos, escolha um menor!"
     );
