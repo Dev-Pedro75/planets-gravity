@@ -96,7 +96,6 @@ class Box {
 
     this.x += this.speedx;
     this.y += this.speed;
-    this.colision();
     this.drawBox(x, y, width, height, color, radius, stroke);
   }
   up() {
