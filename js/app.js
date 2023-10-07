@@ -14,16 +14,17 @@ const colors = [
   "#8b19d1",
   "#d19719",
 ];
+
 const gravityOptions = {
-  terra: 2.2,
-  mercurio: 0.836,
-  venus: 2.002,
-  marte: 0.836,
-  jupiter: 5.148,
-  saturno: 2.3,
-  urano: 2.024,
-  netuno: 2.464,
-  lua: 0.3652,
+  terra: 0.66,
+  mercurio: 0.25079999999999997,
+  venus: 0.6005999999999999,
+  marte: 0.25079999999999997,
+  jupiter: 1.5443999999999998,
+  saturno: 0.69,
+  urano: 0.6072,
+  netuno: 0.7392,
+  lua: 0.10956,
 };
 let confetti = new Confetti("update");
 confetti.setCount(20);
@@ -31,10 +32,6 @@ confetti.setSize(1.2);
 confetti.setPower(20);
 confetti.setFade(true);
 confetti.destroyTarget(false);
-
-for (const planeta in gravityOptions) {
-  gravityOptions[planeta] *= 0.3;
-}
 
 let pause = false;
 const amountBalls = document.querySelector("#amount-balls");
@@ -83,15 +80,21 @@ class Box {
     this.radius = getRandomInt(5, 10);
   }
   update(x, y, width, height, color, radius, stroke) {
-    if (this.y + this.radius + this.speed > canvas.height) {
+    const radiusPlusSpeed = this.radius + this.speed;
+    const frictionTimes1_1 = this.friction * 1.1;
+    const isOutsideHorizontalBounds =
+      this.x + this.radius > canvas.width || this.x - this.radius < 0;
+    const isBelowCanvasHeight = this.y + radiusPlusSpeed > canvas.height;
+
+    if (isBelowCanvasHeight) {
       this.speed = ((-this.speed * 70) / 100) * this.friction;
-      this.speedx = this.speedx * this.friction * 1.1;
+      this.speedx *= frictionTimes1_1;
     } else {
       this.speed += this.gravity;
     }
 
-    if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
-      this.speedx = -this.speedx * this.friction * 1.1;
+    if (isOutsideHorizontalBounds) {
+      this.speedx = -this.speedx * frictionTimes1_1;
     }
 
     this.x += this.speedx;
@@ -102,11 +105,11 @@ class Box {
     if (stopUp) {
       return;
     }
-    setTimeout(() => {
+    const updateProperties = () => {
       stopUp = true;
       setTimeout(() => {
         stopUp = false;
-      }, 1 * 1000);
+      }, 1000);
       this.text = true;
       this.speed = 5;
       this.gravity = -this.gravity;
@@ -115,15 +118,20 @@ class Box {
         this.text = false;
         this.gravity = -this.gravity;
 
-        if (this.x >= (320 - this.radius) * 2) {
+        const minX = (0 + this.radius) * 2;
+        const maxX = (320 - this.radius) * 2;
+
+        if (this.x >= maxX) {
           this.speedx = getRandomInt(-5, -1);
-        } else if (this.x >= (0 + this.radius) * 2) {
+        } else if (this.x >= minX) {
           this.speedx = getRandomInt(1, 5);
         } else {
           this.speedx = getRandomInt(-5, 5);
         }
       }, getRandomInt(180, 500));
-    }, 100);
+    };
+
+    setTimeout(updateProperties, 100);
   }
   drawBox(x, y, width, height, color, radius, stroke) {
     ctx.beginPath();
@@ -150,24 +158,27 @@ function main() {
   if (pause) {
     return;
   }
+
   drawStage();
+
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  const ctx = canvas.getContext("2d");
+
   for (let i = 0; i < boxs.length; i++) {
-    boxs[i].update(
-      boxs[i].x,
-      boxs[i].y,
-      boxs[i].width,
-      boxs[i].height,
-      boxs[i].color,
-      boxs[i].radius,
-      boxs[i].stroke
-    );
-    if (boxs[i].text == true) {
+    const box = boxs[i];
+    const { x, y, width, height, color, radius, stroke, text } = box;
+
+    box.update(x, y, width, height, color, radius, stroke);
+
+    if (text) {
       ctx.font = "2rem Comic Sans MS";
       ctx.fillStyle = "white";
       ctx.textAlign = "center";
-      ctx.fillText("Reverse gravity!", canvas.width / 2, canvas.height / 2);
+      ctx.fillText("Reverse gravity!", canvasWidth / 2, canvasHeight / 2);
     }
   }
+
   window.requestAnimationFrame(main);
 }
 
@@ -175,7 +186,7 @@ bt.addEventListener("click", () => {
   if (!amountBalls) {
     return;
   }
-  if (amountBalls.value > 6000) {
+  if (amountBalls.value > 8000) {
     alert(
       "Esse valor é muito alto e pode causar travamentos, escolha um menor!"
     );
