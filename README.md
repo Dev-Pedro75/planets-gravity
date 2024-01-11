@@ -1,6 +1,6 @@
 <h1 align='center'>Gravity on planets</h1>
 
-<h2 align='center'><a href="https://gravityonplanets.netlify.app/" target='_blank'>Link to test the project online</a></h2>
+<h2 align='center'><a href="https://gravityonplanets.netlify.app/" target='_blank'>Project Demo</a></h2>
 <h2 align='center'>About</h2>
 
 <h3 align='center'>Fun project to show how gravity works on the planets of the solar system</h3>
